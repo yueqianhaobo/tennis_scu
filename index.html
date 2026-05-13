@@ -19,12 +19,6 @@
             --md-color: #7c3aed;
             --md-bg: #F5F3FF;
             --md-border: #DDD6FE;
-            --wd-color: #16a34a;
-            --wd-bg: #DCFCE7;
-            --wd-border: #BBF7D0;
-            --md-color: #9333EA;
-            --md-bg: #F3E8FF;
-            --md-border: #E9D5FF;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -120,6 +114,24 @@
         .header-right .location {
             font-size: 0.9rem;
             opacity: 0.8;
+        }
+
+        .header-right .qq-notice {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #FEF08A;
+            background: linear-gradient(135deg, rgba(254, 240, 138, 0.2), rgba(250, 204, 21, 0.3));
+            padding: 6px 14px;
+            border-radius: 20px;
+            margin-top: 8px;
+            border: 1px solid rgba(254, 240, 138, 0.4);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.85; transform: scale(1.02); }
         }
 
         .tab-nav {
@@ -649,31 +661,6 @@
             font-weight: bold;
         }
 
-        .print-btn {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: linear-gradient(135deg, var(--scu-red), var(--scu-red-dark));
-            color: white;
-            border: none;
-            padding: 15px 28px;
-            border-radius: 50px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: 0 10px 30px rgba(166, 28, 38, 0.3);
-            transition: all 0.3s ease;
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .print-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(166, 28, 38, 0.4);
-        }
-
         @media (max-width: 768px) {
             .header-top { flex-direction: column; text-align: center; gap: 15px; }
             .header-left { flex-direction: column; }
@@ -703,25 +690,27 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-
-.section-title.md { color: var(--md-color); border-color: var(--md-color); }
-        .group-card.md::before { background: linear-gradient(to bottom, var(--md-color), #C084FC); }
-        .group-name.md { color: var(--md-color); }
-        .player-tag.md {
-            background: var(--md-bg);
-            border: 1px solid var(--md-border);
-            color: var(--md-color);
+        .section-title.team { color: var(--team-color); border-color: var(--team-color); }
+        .group-card.team::before { background: linear-gradient(to bottom, var(--team-color), #FB923C); }
+        .group-name.team { color: var(--team-color); }
+        .player-tag.team {
+            background: var(--team-bg);
+            border: 1px solid var(--team-border);
+            color: var(--team-color);
         }
-        .player-tag.md:hover { background: var(--md-color); color: white; }
-        .round-label.md { color: var(--md-color); }
-        .match-card.md::before { background: linear-gradient(to bottom, var(--md-color), #C084FC); }
-        .match-card.md:hover { border-color: var(--md-border); }
-        .match-separator.md {
-            background: linear-gradient(135deg, var(--md-color), #C084FC);
+        .player-tag.team:hover { background: var(--team-color); color: white; }
+        .round-label.team { color: var(--team-color); }
+        .match-card.team::before { background: linear-gradient(to bottom, var(--team-color), #FB923C); }
+        .match-card.team:hover { border-color: var(--team-border); }
+        .match-separator.team {
+            background: linear-gradient(135deg, var(--team-color), #FB923C);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
+        .sub-tab-panel { display: none; animation: fadeIn 0.4s ease; }
+        .sub-tab-panel.active { display: block; }
+        #subNav { display: none; }
 
         @media print {
             body { background: white; }
@@ -748,24 +737,301 @@
             <div class="header-right">
                 <div class="date">2026年5月23、24日</div>
                 <div class="location">📍 四川大学江安校区网球场</div>
+                <div class="qq-notice">📢 具体以QQ群：1084903527通知为主</div>
             </div>
         </div>
     </header>
 
-    <nav class="tab-nav">
-        <button class="tab-btn active" onclick="switchTab('ms')">
-            <span>单项赛-男子单打</span>
+    <nav class="tab-nav" id="mainNav">
+        <button class="tab-btn active" onclick="switchMainTab('team')">
+            <span>🏆 团体赛</span>
         </button>
-        <button class="tab-btn" onclick="switchTab('ws')">
-            <span>单项赛-女子单打</span>
-        </button>
-<button class="tab-btn" onclick="switchTab('wd')">
-            <span>单项赛-女子双打</span>
-        </button>
-        <button class="tab-btn" onclick="switchTab('md')">
-            <span>单项赛-男子双打</span>
+        <button class="tab-btn" onclick="switchMainTab('individual')">
+            <span>🎾 单项赛</span>
         </button>
     </nav>
+
+        <!-- 团体赛 -->
+    <div class="tab-panel active" id="tab-team">
+
+        <div class="rules-section">
+            <div class="rules-card">
+                <div class="rules-header" onclick="toggleRules()">
+                    <h3>📋 竞赛办法</h3>
+                    <span class="rules-toggle" id="rulesToggle">▼</span>
+                </div>
+                <div class="rules-content open" id="rulesContent">
+                    <ol>
+                        <li><strong>竞赛规则：</strong>采用国家体育总局审定的最新《网球竞赛规则》，团体赛采用4局决胜，若局数3：3时采用抢七局比赛，每局比赛采用金球制胜，即40：40时，谁先得一分谁就胜该局，接发球方有权选择接发球区的权力，混双男发男接、女发女接。</li>
+                        <li><strong>赛制安排：</strong>团体赛采用小组赛+交叉淘汰赛及附加赛决出1-8名。第一阶段3组循环赛，每组前2名出线；第二阶段6队交叉淘汰，胜者进入1-3名排位赛，负者进入4-6名排位赛；未出线队伍进入7-8名附加赛。</li>
+                        <li><strong>循环赛决定名次办法：</strong>每轮比赛按赛会对阵表参赛，采用积分制，胜一场2分，负一场得1分，弃赛0分。循环赛按取得积分多少决定名次：如两队取得积分相等，按两队互相比赛的胜负决定名次；若三队或三队以上获胜场数相等，则按在同一组中三队间净胜场数多少决定名次；再相等，则按三队间净胜局数决定名次；仍相等，则按三队间净胜分数决定名次；还相等，由组委会组织抽签决定。</li>
+                        <li><strong>赛制调整权：</strong>承办单位有权根据参赛人数及天气情况改变赛制的权力。</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-area">
+
+            <div class="timeline">
+                <div class="timeline-step">
+                    <div class="timeline-dot group"></div>
+                    <span class="timeline-label">小组赛<br>3组循环</span>
+                </div>
+                <div class="timeline-step">
+                    <div class="timeline-dot r16"></div>
+                    <span class="timeline-label">6进3+3<br>交叉淘汰</span>
+                </div>
+                <div class="timeline-step">
+                    <div class="timeline-dot qf"></div>
+                    <span class="timeline-label">1-3名 / 4-6名<br>循环排位</span>
+                </div>
+                <div class="timeline-step">
+                    <div class="timeline-dot sf"></div>
+                    <span class="timeline-label">7-8名<br>附加赛</span>
+                </div>
+            </div>
+
+            <section>
+                <h2 class="section-title team"><span class="icon">📊</span> 第一阶段：小组赛（组内循环赛）</h2>
+                <p style="color: #64748b; margin-bottom: 20px; font-size: 0.95rem;">
+                    每组进行单循环赛，按积分排名。每组前2名出线（共6队），进入淘汰赛；未出线队伍进入7-8名附加赛。
+                </p>
+                <div class="groups-grid">
+                    <div class="group-card team">
+                        <div class="group-header">
+                            <span class="group-name team">第 1 组</span>
+                            <span class="group-size">3队 · 3轮3场</span>
+                        </div>
+                        <div class="players-list">
+                            <span class="player-tag team">哲学</span>
+                            <span class="player-tag team">化工</span>
+                            <span class="player-tag team">临床</span>
+                        </div>
+                        <table class="schedule-table">
+                            <tr><th>轮次</th><th>对阵</th></tr>
+                            <tr><td class="round-label team">第1轮</td><td>哲学 vs 化工</td></tr>
+                            <tr><td class="round-label team">第2轮</td><td>哲学 vs 临床</td></tr>
+                            <tr><td class="round-label team">第3轮</td><td>化工 vs 临床</td></tr>
+                        </table>
+                    </div>
+
+                    <div class="group-card team">
+                        <div class="group-header">
+                            <span class="group-name team">第 2 组</span>
+                            <span class="group-size">3队 · 3轮3场</span>
+                        </div>
+                        <div class="players-list">
+                            <span class="player-tag team">吴玉章</span>
+                            <span class="player-tag team">文新</span>
+                            <span class="player-tag team">法学</span>
+                        </div>
+                        <table class="schedule-table">
+                            <tr><th>轮次</th><th>对阵</th></tr>
+                            <tr><td class="round-label team">第1轮</td><td>吴玉章 vs 文新</td></tr>
+                            <tr><td class="round-label team">第2轮</td><td>吴玉章 vs 法学</td></tr>
+                            <tr><td class="round-label team">第3轮</td><td>文新 vs 法学</td></tr>
+                        </table>
+                    </div>
+
+                    <div class="group-card team">
+                        <div class="group-header">
+                            <span class="group-name team">第 3 组</span>
+                            <span class="group-size">4队 · 3轮6场</span>
+                        </div>
+                        <div class="players-list">
+                            <span class="player-tag team">口腔</span>
+                            <span class="player-tag team">数学</span>
+                            <span class="player-tag team">水利</span>
+                            <span class="player-tag team">化学</span>
+                        </div>
+                        <table class="schedule-table">
+                            <tr><th>轮次</th><th>对阵</th></tr>
+                            <tr><td class="round-label team">第1轮</td><td>口腔 vs 数学<br>水利 vs 化学</td></tr>
+                            <tr><td class="round-label team">第2轮</td><td>口腔 vs 水利<br>数学 vs 化学</td></tr>
+                            <tr><td class="round-label team">第3轮</td><td>口腔 vs 化学<br>数学 vs 水利</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="section-title team"><span class="icon">⚔️</span> 第二阶段：6进3+3 交叉淘汰赛</h2>
+                <p style="color: #64748b; margin-bottom: 20px; font-size: 0.95rem;">
+                    每组前2名交叉对阵。胜者进入1-3名排位赛，负者进入4-6名排位赛。
+                </p>
+                <div class="knockout-bracket">
+                    <div class="bracket-round">
+                        <div class="round-title team">🏆 6进3+3 对阵表</div>
+                        <div class="matches-grid">
+                            <div class="match-card team">
+                                <div class="match-number">Match A</div>
+                                <div class="match-pair">
+                                    <div class="team placeholder">1组 第1名</div>
+                                    <span class="match-separator team">VS</span>
+                                    <div class="team placeholder">2组 第2名</div>
+                                </div>
+                            </div>
+                            <div class="match-card team">
+                                <div class="match-number">Match B</div>
+                                <div class="match-pair">
+                                    <div class="team placeholder">1组 第2名</div>
+                                    <span class="match-separator team">VS</span>
+                                    <div class="team placeholder">3组 第1名</div>
+                                </div>
+                            </div>
+                            <div class="match-card team">
+                                <div class="match-number">Match C</div>
+                                <div class="match-pair">
+                                    <div class="team placeholder">2组 第1名</div>
+                                    <span class="match-separator team">VS</span>
+                                    <div class="team placeholder">3组 第2名</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="section-title team"><span class="icon">🔥</span> 第三阶段：1-3名 & 4-6名 排位赛</h2>
+                <div class="knockout-bracket">
+                    <div class="bracket-round">
+                        <div class="round-title team">🥇 1-3名 排位赛（3队循环）</div>
+                        <div class="matches-grid">
+                            <div class="match-card team">
+                                <div class="match-number">Round 1</div>
+                                <div class="match-pair">
+                                    <div class="team placeholder">Match A 胜者</div>
+                                    <span class="match-separator team">VS</span>
+                                    <div class="team placeholder">Match B 胜者</div>
+                                </div>
+                            </div>
+                            <div class="match-card team">
+                                <div class="match-number">Round 2</div>
+                                <div class="match-pair">
+                                    <div class="team placeholder">Match A 胜者</div>
+                                    <span class="match-separator team">VS</span>
+                                    <div class="team placeholder">Match C 胜者</div>
+                                </div>
+                            </div>
+                            <div class="match-card team">
+                                <div class="match-number">Round 3</div>
+                                <div class="match-pair">
+                                    <div class="team placeholder">Match B 胜者</div>
+                                    <span class="match-separator team">VS</span>
+                                    <div class="team placeholder">Match C 胜者</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bracket-round">
+                        <div class="round-title team">📊 4-6名 排位赛（3队循环）</div>
+                        <div class="matches-grid">
+                            <div class="match-card team">
+                                <div class="match-number">Round 1</div>
+                                <div class="match-pair">
+                                    <div class="team placeholder">Match A 负者</div>
+                                    <span class="match-separator team">VS</span>
+                                    <div class="team placeholder">Match B 负者</div>
+                                </div>
+                            </div>
+                            <div class="match-card team">
+                                <div class="match-number">Round 2</div>
+                                <div class="match-pair">
+                                    <div class="team placeholder">Match A 负者</div>
+                                    <span class="match-separator team">VS</span>
+                                    <div class="team placeholder">Match C 负者</div>
+                                </div>
+                            </div>
+                            <div class="match-card team">
+                                <div class="match-number">Round 3</div>
+                                <div class="match-pair">
+                                    <div class="team placeholder">Match B 负者</div>
+                                    <span class="match-separator team">VS</span>
+                                    <div class="team placeholder">Match C 负者</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="section-title team"><span class="icon">🏅</span> 第四阶段：7-8名 附加赛</h2>
+                <p style="color: #64748b; margin-bottom: 20px; font-size: 0.95rem;">
+                    小组赛未出线的4支队伍（1组第3、2组第3、3组第3、3组第4）进行附加赛，决出第7-8名。
+                </p>
+                <div class="knockout-bracket">
+                    <div class="bracket-round">
+                        <div class="round-title team">🎯 7-8名 半决赛</div>
+                        <div class="matches-grid">
+                            <div class="match-card team">
+                                <div class="match-number">SF-A</div>
+                                <div class="match-pair">
+                                    <div class="team placeholder">1组 第3名</div>
+                                    <span class="match-separator team">VS</span>
+                                    <div class="team placeholder">3组 第3名</div>
+                                </div>
+                            </div>
+                            <div class="match-card team">
+                                <div class="match-number">SF-B</div>
+                                <div class="match-pair">
+                                    <div class="team placeholder">2组 第3名</div>
+                                    <span class="match-separator team">VS</span>
+                                    <div class="team placeholder">3组 第4名</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bracket-round">
+                        <div class="round-title team">🏆 7-8名 决赛</div>
+                        <div class="matches-grid">
+                            <div class="match-card team">
+                                <div class="match-number">7-8名 Final</div>
+                                <div class="match-pair">
+                                    <div class="team placeholder">SF-A 胜者</div>
+                                    <span class="match-separator team">VS</span>
+                                    <div class="team placeholder">SF-B 胜者</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="note-box">
+                <h4>📌 团体赛规则说明</h4>
+                <ul>
+                    <li>小组赛采用单循环制，胜一场2分，负一场1分，弃赛0分</li>
+                    <li>每组前2名出线进入淘汰赛，未出线队伍进入7-8名附加赛</li>
+                    <li>淘汰赛：6队交叉淘汰，3个胜者进入1-3名排位赛，3个负者进入4-6名排位赛</li>
+                    <li>1-3名 / 4-6名：各3队进行单循环，按积分决出名次</li>
+                    <li>7-8名：4队先进行半决赛，2个胜者决7-8名</li>
+                    <li>采用4局决胜，3:3时抢七，金球制胜</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+<!-- 单项赛 -->
+    <div class="tab-panel" id="tab-individual">
+        <nav class="tab-nav" id="subNav">
+            <button class="tab-btn active" onclick="switchSubTab('ms')">
+                <span>单项赛-男子单打</span>
+            </button>
+            <button class="tab-btn" onclick="switchSubTab('ws')">
+                <span>单项赛-女子单打</span>
+            </button>
+            <button class="tab-btn" onclick="switchSubTab('wd')">
+                <span>单项赛-女子双打</span>
+            </button>
+            <button class="tab-btn" onclick="switchSubTab('md')">
+                <span>单项赛-男子双打</span>
+            </button>
+        </nav>
+        <div id="subContent">
 
     <div class="rules-section">
         <div class="rules-card">
@@ -776,7 +1042,7 @@
             <div class="rules-content open" id="rulesContent">
                 <ol>
                     <li><strong>竞赛规则：</strong>采用国家体育总局审定的最新《网球竞赛规则》，团体赛和单项小组赛均采用4局决胜，若局数3：3时采用抢七局比赛，每局比赛采用金球制胜，即40：40时，谁先得一分谁就胜该局，接发球方有权选择接发球区的权力，混双男发男接、女发女接。</li>
-                    <li><strong>赛制安排：</strong>单项赛第一阶段采用分组循环赛，第二阶段采用交叉淘汰赛及附加赛决出1—8名。团体赛采用交叉淘汰赛及附加赛决出1-8名。</li>
+                    <li><strong>赛制安排：</strong>单项赛第一阶段采用分组循环赛，第二阶段采用交叉淘汰赛及附加赛决出1—8名。团体赛采用小组赛+交叉淘汰赛及附加赛决出1-8名。</li>
                     <li><strong>循环赛决定名次办法：</strong>每轮比赛按赛会对阵表参赛，采用积分制，胜一场2分，负一场得1分，弃赛0分。循环赛按取得积分多少决定名次：如两队取得积分相等，按两队互相比赛的胜负决定名次；若三队或三队以上获胜场数相等，则按在同一组中三队间净胜场数多少决定名次；再相等，则按三队间净胜局数决定名次；仍相等，则按三队间净胜分数决定名次；还相等，由组委会组织抽签决定。</li>
                     <li><strong>赛制调整权：</strong>承办单位有权根据参赛人数及天气情况改变赛制的权力。</li>
                 </ol>
@@ -787,7 +1053,7 @@
     <main class="content-area">
 
         <!-- ========== 男子单打 ========== -->
-        <div class="tab-panel active" id="tab-ms">
+        <div class="sub-tab-panel active" id="tab-ms">
 
             <div class="timeline">
                 <div class="timeline-step">
@@ -1219,7 +1485,6 @@
             <div class="note-box">
                 <h4>📌 比赛规则说明</h4>
                 <ul>
-                    <li>小组赛采用单循环制，每轮结束后统一休息，确保选手不连场</li>
                     <li>淘汰赛阶段：每组第1名对阵其他组第2名，避免同组选手过早相遇</li>
                     <li>8进4负者进入5-8名排位赛：先进行5-8名半决赛，胜者争5-6名，负者争7-8名</li>
                     <li>半决赛负者直接进行3-4名决赛</li>
@@ -1229,7 +1494,7 @@
         </div>
 
         <!-- ========== 女子单打 ========== -->
-        <div class="tab-panel" id="tab-ws">
+        <div class="sub-tab-panel" id="tab-ws">
 
             <div class="timeline">
                 <div class="timeline-step">
@@ -1480,7 +1745,6 @@
             <div class="note-box">
                 <h4>📌 比赛规则说明</h4>
                 <ul>
-                    <li>小组赛采用单循环制，每轮结束后统一休息，确保选手不连场</li>
                     <li>淘汰赛阶段：每组第1名对阵其他组第2名，避免同组选手过早相遇</li>
                     <li>8进4负者进入5-8名排位赛：先进行5-8名半决赛，胜者争5-6名，负者争7-8名</li>
                     <li>半决赛负者直接进行3-4名决赛</li>
@@ -1489,8 +1753,8 @@
             </div>
         </div>
 
-<!-- ========== 女子双打 ========== -->
-        <div class="tab-panel" id="tab-wd">
+                <!-- ========== 女子双打 ========== -->
+        <div class="sub-tab-panel" id="tab-wd">
 
             <div class="timeline">
                 <div class="timeline-step">
@@ -1631,7 +1895,6 @@
                 <h4>📌 女双比赛规则说明</h4>
                 <ul>
                     <li>3对组合进行单循环赛，每对均出场2次</li>
-                    <li>每轮1场比赛，未出场组合轮空休息</li>
                     <li>采用4局决胜，3:3时抢七，金球制胜</li>
                     <li>积分制：胜一场2分，负一场1分，弃赛0分</li>
                     <li>最终按积分直接排名，决出第1-3名</li>
@@ -1639,8 +1902,8 @@
             </div>
         </div>
 
-<!-- ========== 男子双打 ========== -->
-        <div class="tab-panel" id="tab-md">
+<!-- ========== 男子双打（占位） ========== -->
+        <div class="sub-tab-panel" id="tab-md">
 
             <div class="timeline">
                 <div class="timeline-step">
@@ -1812,23 +2075,39 @@
                     <li>1-4名：1组第1 vs 2组第2，1组第2 vs 2组第1；胜者争1-2名，负者争3-4名</li>
                     <li>5-8名：1组第3 vs 2组第4，1组第4 vs 2组第3；胜者争5-6名，负者争7-8名</li>
                     <li>采用4局决胜，3:3时抢七，金球制胜</li>
-                    <li>所有轮次之间安排休息时间，确保选手不连场</li>
                 </ul>
             </div>
         </div>
+        </div>
+    </div>
     </main>
-
-    <button class="print-btn" onclick="window.print()">
-        <span>🖨️</span>
-        <span>打印赛程表</span>
-    </button>
-
-    <script>
-        function switchTab(tabId) {
+<script>
+        function switchMainTab(tabId) {
             document.querySelectorAll('.tab-panel').forEach(panel => {
                 panel.classList.remove('active');
             });
-            document.querySelectorAll('.tab-btn').forEach(btn => {
+            document.querySelectorAll('#mainNav .tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById('tab-' + tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+
+            const subNav = document.getElementById('subNav');
+            if (tabId === 'individual') {
+                subNav.style.display = 'flex';
+                switchSubTab('ms');
+            } else {
+                subNav.style.display = 'none';
+                document.querySelectorAll('.sub-tab-panel').forEach(p => p.classList.remove('active'));
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function switchSubTab(tabId) {
+            document.querySelectorAll('.sub-tab-panel').forEach(panel => {
+                panel.classList.remove('active');
+            });
+            document.querySelectorAll('#subNav .tab-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
             document.getElementById('tab-' + tabId).classList.add('active');
